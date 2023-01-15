@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrManagement.core", "HrMana
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrManagement.interfaces", "HrManagement.interfaces\HrManagement.interfaces.csproj", "{197AF76D-823B-469D-9E22-00C8B0C56588}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrManagement.Models", "HrManagement.Models\HrManagement.Models.csproj", "{84087C2F-FB6F-41A6-A7A4-39C2544B0506}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrManagement.models", "HrManagement.Models\HrManagement.models.csproj", "{84087C2F-FB6F-41A6-A7A4-39C2544B0506}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HrManagement.paging", "HrManagement.paging\HrManagement.paging.csproj", "{EB3EACCC-3680-40F0-A793-7FA9BD1A9F5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrManagement.paging", "HrManagement.paging\HrManagement.paging.csproj", "{EB3EACCC-3680-40F0-A793-7FA9BD1A9F5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

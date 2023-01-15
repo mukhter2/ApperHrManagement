@@ -18,7 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HrManagement.context\HrManagement.context.csproj" />
     <ProjectReference Include="..\HrManagement.interfaces\HrManagement.interfaces.csproj" />
-    <ProjectReference Include="..\HrManagement.Models\HrManagement.Models.csproj" />
+    <ProjectReference Include="..\HrManagement.Models\HrManagement.models.csproj" />
     <ProjectReference Include="..\HrManagement.paging\HrManagement.paging.csproj" />
   </ItemGroup>
 
