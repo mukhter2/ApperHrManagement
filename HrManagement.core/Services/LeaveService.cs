@@ -41,7 +41,7 @@ namespace HrManagement.core.Service
 
         public async Task<PageResponse<List<Leave>>> GetLeavePaging(PaginationFilter filter, HttpContext httpContext)
         {
-            List<LeaveModel> response = new();
+            List<Leave> response = new();
             var route = httpContext.Request.Path.Value;
 
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
@@ -51,7 +51,7 @@ namespace HrManagement.core.Service
         .Take(validFilter.PageSize)
         .ToList();
 
-            dataList.ForEach(row => response.Add(new LeaveModel()
+            dataList.ForEach(row => response.Add(new Leave()
             {
                 Id = row.Id,
                 EmployeeId = row.EmployeeId,
@@ -67,6 +67,34 @@ namespace HrManagement.core.Service
 
             return pagedReponse;
         }
+        public async Task<PageResponse<List<Leave>>> GetLeaveSearch(string value, PaginationFilter filter, HttpContext httpContext)
+        {
+            List<LeaveModel> response = new();
+            var route = httpContext.Request.Path.Value;
+
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+
+            //Students.Where(x => x.Name.Contains(name)).ToList();
+            var dataList = _context.Leaves.Where(x => x.Id.Contains(value) || x.LeaveType.Contains(value) || x.EmployeeId.Contains(value) || x.StartDate.ToString().Contains(value) || x.Description.Contains(value) || x.EndDate.ToString().Contains(value)).OrderByDescending(q => q.Id)
+        .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
+        .Take(validFilter.PageSize)
+        .ToList();
+            dataList.ForEach(row => response.Add(new LeaveModel()
+            {
+                Id = row.Id,
+                EmployeeId = row.EmployeeId,
+                LeaveType = row.LeaveType,
+                Description = row.Description,
+                StartDate = row.StartDate,
+                EndDate = row.EndDate,
+            }));
+
+            var totalRecords = _context.Employees.Count();
+            var pagedReponse = PaginationHelper.CreatePagedReponse<Leave>(dataList, validFilter, totalRecords, uriService, route);
+
+            return pagedReponse;
+        }
+
         public LeaveModel GetLeavesById(string id)
         {
             LeaveModel response = new LeaveModel();
@@ -93,30 +121,30 @@ namespace HrManagement.core.Service
         /// <summary>
         /// It serves the POST/PUT/PATCH
         /// </summary>
-        public void SaveLeaves(LeaveModel LeaveModel)
+        public void SaveLeaves(LeaveModel leaveModel)
         {
             Leave dbTable = new();
-            dbTable = _context.Leaves.Where(d => d.Id.Equals(LeaveModel.Id))
+            dbTable = _context.Leaves.Where(d => d.Id.Equals(leaveModel.Id))
                     .FirstOrDefault();
             if (dbTable != null)
             {
-                dbTable.EmployeeId = LeaveModel.EmployeeId;
-                dbTable.LeaveType = LeaveModel.LeaveType;
-                dbTable.Description = LeaveModel.Description;
-                dbTable.StartDate = LeaveModel.StartDate;
-                dbTable.EndDate = LeaveModel.EndDate;
+                dbTable.EmployeeId = leaveModel.EmployeeId;
+                dbTable.LeaveType = leaveModel.LeaveType;
+                dbTable.Description = leaveModel.Description;
+                dbTable.StartDate = leaveModel.StartDate;
+                dbTable.EndDate = leaveModel.EndDate;
             }
             else
             {
                 //POST
                 dbTable = new()
                 {
-                    Id = LeaveModel.Id,
-                    EmployeeId = LeaveModel.EmployeeId,
-                    LeaveType = LeaveModel.LeaveType,
-                    Description = LeaveModel.Description,
-                    StartDate = LeaveModel.StartDate,
-                    EndDate = LeaveModel.EndDate
+                    Id = leaveModel.Id,
+                    EmployeeId = leaveModel.EmployeeId,
+                    LeaveType = leaveModel.LeaveType,
+                    Description = leaveModel.Description,
+                    StartDate = leaveModel.StartDate,
+                    EndDate = leaveModel.EndDate
                 };
                 _context.Leaves.Add(dbTable);
 

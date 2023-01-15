@@ -1,5 +1,4 @@
 ﻿using HrManagement.context.efcore;
-using HrManagement.interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

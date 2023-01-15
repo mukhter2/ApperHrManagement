@@ -11,6 +11,7 @@ using HrManagement.core.Services;
 using Microsoft.AspNetCore.Mvc;
 using static System.Net.WebRequestMethods;
 using Microsoft.Extensions.DependencyInjection;
+using System.Xml.Linq;
 
 namespace HrManagement.core.Service
 {
@@ -46,12 +47,39 @@ namespace HrManagement.core.Service
             }));
             return response;
         }
+        public async Task<PageResponse<List<Employee>>> GetEmployeeSearch(string value, PaginationFilter filter, HttpContext httpContext)
+        {
+            List<EmployeeModel> response = new();
+            var route = httpContext.Request.Path.Value;
+
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+
+            //Students.Where(x => x.Name.Contains(name)).ToList();
+            var dataList = _context.Employees.Where( x => x.Id.Contains(value) || x.Designation.Contains(value) || x.Department.Contains(value) || x.DateOfBirth.ToString().Contains(value) || x.FirstName.Contains(value) || x.MiddleName.Contains(value) || x.LastName.Contains(value) || x.JoiningDate.ToString().Contains(value)).OrderByDescending(q => q.Id)
+        .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
+        .Take(validFilter.PageSize)
+        .ToList(); 
+            dataList.ForEach(row => response.Add(new EmployeeModel()
+            {
+                FirstName = row.FirstName,
+                MiddleName = row.MiddleName,
+                LastName = row.LastName,
+                DateOfBirth = row.DateOfBirth,
+                JoiningDate = row.JoiningDate,
+                Designation = row.Designation,
+                Department = row.Department,
+                Id = row.Id
+            }));
+
+            var totalRecords = _context.Employees.Count();
+            var pagedReponse = PaginationHelper.CreatePagedReponse<Employee>(dataList, validFilter, totalRecords, uriService, route);
+
+            return pagedReponse;
+        }
         public async Task<PageResponse<List<Employee>>> GetEmployeePaging(PaginationFilter filter, HttpContext httpContext)
         {
             List<EmployeeModel> response = new();
-            /*            var accessor = = uriService.HttpContext.Request;
-
-            */
+            
            var route = httpContext.Request.Path.Value;
 
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
@@ -64,9 +92,7 @@ namespace HrManagement.core.Service
         .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
         .Take(validFilter.PageSize)
         .ToList();
-            /*            var sortedList = dataList.OrderByDescending(q => q.Id).ToList();
-            */
-
+            
             dataList.ForEach(row => response.Add(new EmployeeModel()
             {
                 FirstName = row.FirstName,
@@ -157,10 +183,6 @@ namespace HrManagement.core.Service
             }
         }
 
-        public IEnumerable<EmployeeModel> GetEmployeePagingAsync()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
 

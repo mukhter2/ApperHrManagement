@@ -100,6 +100,26 @@ namespace HrManagement.db.Controllers
                 return BadRequest(ResponseHandler.GetExceptionResponse(ex));
             }
         }
+        [HttpPost]
+        [Route("api/[controller]/GetEmployees/search={value}")]
+        public IActionResult DataSearch(string value)
+        {
+            ResponseType type = ResponseType.Success;
+            try
+            {
+                var validFilter = new PaginationFilter();
+
+                Task<PageResponse<List<Employee>>> data = _db.GetEmployeeSearch(value,validFilter, HttpContext);
+
+
+                return Ok(ResponseHandler.GetAppResponse(type, data));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
+
+        }
 
         // PUT api/<EmployeesController>/5
         [HttpPut]

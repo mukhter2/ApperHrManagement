@@ -97,6 +97,27 @@ namespace LeaveManagement.db.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("api/[controller]/GetLeaves/search={value}")]
+        public IActionResult DataSearch(string value)
+        {
+            ResponseType type = ResponseType.Success;
+            try
+            {
+                var validFilter = new PaginationFilter();
+
+                Task<PageResponse<List<Leave>>> data = _db.GetLeaveSearch(value, validFilter, HttpContext);
+
+
+                return Ok(ResponseHandler.GetAppResponse(type, data));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
+
+        }
+
         // PUT api/<LeavesController>/5
         [HttpPut]
         [Route("api/[controller]/UpdateLeave")]
