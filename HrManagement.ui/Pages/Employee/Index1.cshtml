@@ -1,0 +1,31 @@
+﻿@page
+@model HrManagement.ui.Employee.Index1Model
+@{
+}
+<script src="~/Scripts/jquery-3.2.1.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        var options = {};
+        options.url = "https://localhost:7016/api/Employees/GetEmployees";
+        options.type = "GET";
+        options.dataType = "json";
+        options.success = function (data) {
+
+            data.forEach(function (element) {
+                $("#result").append("<h3>" + element + "</h3>");
+            });
+        };
+        options.error = function () {
+            $("#msg").html("Error while calling the Web API!");
+        };
+        $.ajax(options);
+    });
+
+
+</script>
+
+
+<h1>@ViewData["heading"]</h1>
